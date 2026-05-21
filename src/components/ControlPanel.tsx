@@ -23,9 +23,9 @@ interface SensorData {
 
 
 function Gauge({ value, max }: { value: number; max: number }) {
-  const cx = 90
-  const cy = 95
-  const r = 68
+  const cx = 100
+  const cy = 100
+  const r = 70
   const startDeg = -210
   const endDeg = 30
   const totalSweep = endDeg - startDeg
@@ -45,7 +45,7 @@ function Gauge({ value, max }: { value: number; max: number }) {
   const fillAngle = startDeg + (value / max) * totalSweep
 
   return (
-    <svg width="180" height="155" viewBox="0 0 180 155">
+    <svg width="200" height="170" viewBox="0 0 200 170" style={{ overflow: 'visible' }}>
       <defs>
         <linearGradient id="gGrad" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stopColor="#4a7c2f" />
@@ -53,12 +53,12 @@ function Gauge({ value, max }: { value: number; max: number }) {
         </linearGradient>
       </defs>
       {/* Track */}
-      <path d={arc(startDeg, endDeg)} fill="none" stroke="#e8eee0" strokeWidth="11" strokeLinecap="round" />
+      <path d={arc(startDeg, endDeg)} fill="none" stroke="#e8eee0" strokeWidth="12" strokeLinecap="round" />
       {/* Fill */}
-      <path d={arc(startDeg, fillAngle)} fill="none" stroke="url(#gGrad)" strokeWidth="11" strokeLinecap="round" />
-      <text x={cx} y={cy - 22} textAnchor="middle" fill="#7ab648" fontSize="9" fontWeight="700" fontFamily="Plus Jakarta Sans, sans-serif">SUHU</text>
-      <text x={cx} y={cy + 3} textAnchor="middle" fill="#8a9a7a" fontSize="10" fontFamily="Plus Jakarta Sans, sans-serif">SAAT INI:</text>
-      <text x={cx} y={cy + 28} textAnchor="middle" fill="#1a2810" fontSize="26" fontWeight="800" fontFamily="Plus Jakarta Sans, sans-serif">{value.toFixed(1)}°C</text>
+      <path d={arc(startDeg, fillAngle)} fill="none" stroke="url(#gGrad)" strokeWidth="12" strokeLinecap="round" />
+      <text x={cx} y={cy - 22} textAnchor="middle" fill="#7ab648" fontSize="10" fontWeight="700" fontFamily="Plus Jakarta Sans, sans-serif">SUHU</text>
+      <text x={cx} y={cy + 3} textAnchor="middle" fill="#8a9a7a" fontSize="11" fontFamily="Plus Jakarta Sans, sans-serif">SAAT INI:</text>
+      <text x={cx} y={cy + 30} textAnchor="middle" fill="#1a2810" fontSize="28" fontWeight="800" fontFamily="Plus Jakarta Sans, sans-serif">{value.toFixed(1)}°C</text>
     </svg>
   )
 }
@@ -334,7 +334,13 @@ export default function ControlPanel() {
                 </div>
               ) : (
                 <>
-                  <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.2rem' }}>
+                  <div style={{ 
+                    display: 'flex', 
+                    justifyContent: 'center', 
+                    marginBottom: '1.2rem',
+                    padding: '0.5rem',
+                    overflow: 'visible'
+                  }}>
                     <Gauge value={currentTemp} max={100} />
                   </div>
 

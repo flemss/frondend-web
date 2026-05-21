@@ -23,7 +23,7 @@ const ALL_PRODUCTS: Product[] = [
   { id: 4, name: 'Bubuk Cabai Jawa', description: 'Cabai jawa pilihan kaya antioksidan, diproses tanpa bahan pengawet.', price: 'Rp 135.000', unit: '1000g', emoji: '🫚', rating: 4.6, reviews: 72, bgColor: 'linear-gradient(135deg,#7a2010,#b84030)', category: 'Rempah' },
 ]
 
-const CATEGORIES = ['Semua', 'Rempah', 'Teh', 'Jamu']
+const CATEGORIES = ['Semua', 'Rempah', 'Teh',]
 
 function ProductCard({ product, index }: { product: Product; index: number }) {
   const [hovered, setHovered] = useState(false)

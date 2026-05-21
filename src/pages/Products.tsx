@@ -105,6 +105,13 @@ function CategoryBtn({ label, active, onClick }: { label: string; active: boolea
 
 export default function Products() {
   const [activeCategory, setActiveCategory] = useState('Semua')
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
+
+  React.useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const filteredProducts = activeCategory === 'Semua' 
     ? ALL_PRODUCTS 
@@ -112,12 +119,12 @@ export default function Products() {
 
   return (
     <>
-      <div style={{ paddingTop: '64px', minHeight: '100vh', background: '#f5f2eb' }}>
+      <div style={{ paddingTop: isMobile ? '56px' : '64px', minHeight: '100vh', background: '#f5f2eb' }}>
         {/* Hero Section */}
         <section
           style={{
             background: 'linear-gradient(135deg,#1a2e0f 0%,#2d4a1e 45%,#4a7c2f 100%)',
-            padding: '4rem 2rem',
+            padding: isMobile ? '3rem 1rem' : '4rem 2rem',
             textAlign: 'center',
           }}
         >
@@ -152,14 +159,15 @@ export default function Products() {
         </section>
 
         {/* Products Section */}
-        <section style={{ padding: '4rem 2rem' }}>
+        <section style={{ padding: isMobile ? '3rem 1rem' : '4rem 2rem' }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
             {/* Filter */}
             <div
               style={{
                 display: 'flex',
+                flexDirection: isMobile ? 'column' : 'row',
                 justifyContent: 'space-between',
-                alignItems: 'center',
+                alignItems: isMobile ? 'flex-start' : 'center',
                 marginBottom: '2.5rem',
                 flexWrap: 'wrap',
                 gap: '1rem',
@@ -194,7 +202,7 @@ export default function Products() {
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))',
+                gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill,minmax(270px,1fr))',
                 gap: '1.4rem',
               }}
             >

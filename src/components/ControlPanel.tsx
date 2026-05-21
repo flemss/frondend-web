@@ -239,7 +239,7 @@ export default function ControlPanel() {
   }, [])
 
   return (
-    <section style={{ background: '#f5f2eb', padding: '5rem 2rem' }}>
+    <section style={{ background: '#f5f2eb', padding: '3rem 1rem' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
 
         {/* Section header */}
@@ -316,7 +316,12 @@ export default function ControlPanel() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: '2.5rem', alignItems: 'start' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: window.innerWidth > 768 ? '220px 1fr' : '1fr',
+            gap: '2.5rem', 
+            alignItems: 'start' 
+          }}>
             {/* Left controls */}
             <div>
               {loading ? (

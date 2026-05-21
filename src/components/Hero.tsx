@@ -64,7 +64,7 @@ export default function Hero() {
         background: 'linear-gradient(135deg,#1a2e0f 0%,#2d4a1e 45%,#4a7c2f 100%)',
         display: 'flex',
         alignItems: 'center',
-        padding: '80px 2rem 4rem',
+        padding: '80px 1rem 4rem',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -90,7 +90,8 @@ export default function Hero() {
       <div
         style={{
           maxWidth: '1200px', margin: '0 auto', width: '100%',
-          display: 'grid', gridTemplateColumns: '1fr 1fr',
+          display: 'grid', 
+          gridTemplateColumns: window.innerWidth > 768 ? '1fr 1fr' : '1fr',
           gap: '4rem', alignItems: 'center',
         }}
       >

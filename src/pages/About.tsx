@@ -60,14 +60,22 @@ function ValueCard({ icon: Icon, title, desc }: { icon: any; title: string; desc
 }
 
 export default function About() {
+  const [isMobile, setIsMobile] = React.useState(window.innerWidth <= 768)
+
+  React.useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   return (
     <>
-      <div style={{ paddingTop: '64px', minHeight: '100vh', background: '#f5f2eb' }}>
+      <div style={{ paddingTop: isMobile ? '56px' : '64px', minHeight: '100vh', background: '#f5f2eb' }}>
         {/* Hero Section */}
         <section
           style={{
             background: 'linear-gradient(135deg,#1a2e0f 0%,#2d4a1e 45%,#4a7c2f 100%)',
-            padding: '5rem 2rem',
+            padding: isMobile ? '3rem 1rem' : '5rem 2rem',
             textAlign: 'center',
           }}
         >
@@ -104,7 +112,7 @@ export default function About() {
         </section>
 
         {/* Story Section */}
-        <section style={{ padding: '5rem 2rem', background: 'white' }}>
+        <section style={{ padding: isMobile ? '3rem 1rem' : '5rem 2rem', background: 'white' }}>
           <div style={{ maxWidth: '900px', margin: '0 auto' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
               <Target size={32} color="#4a7c2f" />
@@ -140,7 +148,7 @@ export default function About() {
         </section>
 
         {/* Timeline Section */}
-        <section style={{ padding: '5rem 2rem', background: '#f5f2eb' }}>
+        <section style={{ padding: isMobile ? '3rem 1rem' : '5rem 2rem', background: '#f5f2eb' }}>
           <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
@@ -163,30 +171,71 @@ export default function About() {
 
             <div style={{ position: 'relative' }}>
               {/* Timeline line */}
-              <div
-                style={{
-                  position: 'absolute',
-                  left: '50%',
-                  top: '0',
-                  bottom: '0',
-                  width: '2px',
-                  background: 'linear-gradient(180deg, #7ab648, #4a7c2f)',
-                  transform: 'translateX(-50%)',
-                }}
-              />
+              {!isMobile && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    left: '50%',
+                    top: '0',
+                    bottom: '0',
+                    width: '2px',
+                    background: 'linear-gradient(180deg, #7ab648, #4a7c2f)',
+                    transform: 'translateX(-50%)',
+                  }}
+                />
+              )}
 
               {TIMELINE.map((item, i) => (
                 <div
                   key={i}
                   style={{
-                    display: 'grid',
+                    display: isMobile ? 'block' : 'grid',
                     gridTemplateColumns: i % 2 === 0 ? '1fr auto 1fr' : '1fr auto 1fr',
                     gap: '2rem',
                     marginBottom: '3rem',
                     alignItems: 'center',
                   }}
                 >
-                  {i % 2 === 0 ? (
+                  {isMobile ? (
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                      <div
+                        style={{
+                          width: '48px',
+                          height: '48px',
+                          background: 'linear-gradient(135deg,#7ab648,#4a7c2f)',
+                          borderRadius: '50%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: 'white',
+                          fontWeight: 700,
+                          fontSize: '0.9rem',
+                          boxShadow: '0 4px 12px rgba(74,124,47,0.3)',
+                          flexShrink: 0,
+                        }}
+                      >
+                        {item.year}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div
+                          style={{
+                            background: 'white',
+                            borderRadius: '12px',
+                            padding: '1.5rem',
+                            boxShadow: '0 4px 20px rgba(45,74,30,0.1)',
+                            border: '1px solid rgba(74,124,47,0.1)',
+                          }}
+                        >
+                          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1a2810', marginBottom: '0.5rem' }}>
+                            {item.title}
+                          </h3>
+                          <p style={{ fontSize: '0.88rem', color: '#6a7a5a', lineHeight: 1.6 }}>
+                            {item.desc}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : i % 2 === 0 ? (
                     <>
                       <div style={{ textAlign: 'right' }}>
                         <div
@@ -274,7 +323,7 @@ export default function About() {
         </section>
 
         {/* Innovation Section */}
-        <section style={{ padding: '5rem 2rem', background: 'white' }}>
+        <section style={{ padding: isMobile ? '3rem 1rem' : '5rem 2rem', background: 'white' }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
@@ -328,7 +377,7 @@ export default function About() {
         </section>
 
         {/* Values Section */}
-        <section style={{ padding: '5rem 2rem', background: '#f5f2eb' }}>
+        <section style={{ padding: isMobile ? '3rem 1rem' : '5rem 2rem', background: '#f5f2eb' }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <h2
@@ -363,7 +412,7 @@ export default function About() {
         {/* CTA Section */}
         <section
           style={{
-            padding: '4rem 2rem',
+            padding: isMobile ? '3rem 1rem' : '4rem 2rem',
             background: 'linear-gradient(135deg,#2d4a1e,#4a7c2f)',
             textAlign: 'center',
           }}

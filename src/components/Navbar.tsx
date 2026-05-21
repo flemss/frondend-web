@@ -39,6 +39,13 @@ export default function Navbar() {
   const navigate = useNavigate()
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true'
   const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}')
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
+
+  React.useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   function handleLogout() {
     localStorage.removeItem('isAuthenticated')
@@ -58,30 +65,31 @@ export default function Navbar() {
         zIndex: 100,
         background: 'rgba(27,46,15,0.96)',
         backdropFilter: 'blur(12px)',
-        height: '64px',
+        height: isMobile ? '56px' : '64px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 2rem',
+        padding: isMobile ? '0 1rem' : '0 2rem',
         boxShadow: '0 2px 24px rgba(0,0,0,0.18)',
       }}
     >
       {/* Logo */}
-      <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+      <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '6px' : '8px', textDecoration: 'none' }}>
         <div
           style={{
-            width: '32px', height: '32px',
+            width: isMobile ? '28px' : '32px',
+            height: isMobile ? '28px' : '32px',
             background: 'linear-gradient(135deg,#7ab648,#4a7c2f)',
             borderRadius: '8px',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}
         >
-          <Leaf size={18} color="white" />
+          <Leaf size={isMobile ? 16 : 18} color="white" />
         </div>
         <span
           style={{
             fontFamily: "'Playfair Display', serif",
-            fontSize: '1.3rem',
+            fontSize: isMobile ? '1rem' : '1.3rem',
             fontWeight: 700,
             color: 'white',
           }}
@@ -90,21 +98,23 @@ export default function Navbar() {
         </span>
       </Link>
 
-      {/* Links */}
-      <div style={{ display: 'flex', gap: '2rem' }}>
-        {NAV_LINKS.map((link) => (
-          <NavLink key={link.path} label={link.label} path={link.path} />
-        ))}
-        {isAuthenticated && PROTECTED_LINKS.map((link) => (
-          <NavLink key={link.path} label={link.label} path={link.path} />
-        ))}
-      </div>
+      {/* Links - Hide on mobile */}
+      {!isMobile && (
+        <div style={{ display: 'flex', gap: '2rem' }}>
+          {NAV_LINKS.map((link) => (
+            <NavLink key={link.path} label={link.label} path={link.path} />
+          ))}
+          {isAuthenticated && PROTECTED_LINKS.map((link) => (
+            <NavLink key={link.path} label={link.label} path={link.path} />
+          ))}
+        </div>
+      )}
 
       {/* Actions */}
-      <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: isMobile ? '0.5rem' : '0.8rem', alignItems: 'center' }}>
         {isAuthenticated ? (
           <>
-            {currentUser.name && (
+            {!isMobile && currentUser.name && (
               <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.85rem', fontWeight: 500 }}>
                 {currentUser.name}
               </span>
@@ -114,18 +124,19 @@ export default function Navbar() {
               style={{
                 background: 'linear-gradient(135deg,#7ab648,#4a7c2f)',
                 borderRadius: '8px',
-                padding: '8px 18px',
+                padding: isMobile ? '6px 12px' : '8px 18px',
                 color: 'white',
-                fontSize: '0.85rem',
+                fontSize: isMobile ? '0.75rem' : '0.85rem',
                 fontWeight: 600,
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
                 cursor: 'pointer',
+                border: 'none',
               }}
             >
-              <LogOut size={16} />
-              Keluar
+              <LogOut size={isMobile ? 14 : 16} />
+              {!isMobile && 'Keluar'}
             </button>
           </>
         ) : (
@@ -134,11 +145,12 @@ export default function Navbar() {
             style={{
               background: 'linear-gradient(135deg,#7ab648,#4a7c2f)',
               borderRadius: '8px',
-              padding: '8px 18px',
+              padding: isMobile ? '6px 12px' : '8px 18px',
               color: 'white',
-              fontSize: '0.85rem',
+              fontSize: isMobile ? '0.75rem' : '0.85rem',
               fontWeight: 600,
               cursor: 'pointer',
+              border: 'none',
             }}
           >
             Masuk

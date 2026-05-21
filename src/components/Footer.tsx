@@ -95,12 +95,20 @@ function ContactRow({ Icon, text }: ContactData) {
 
 // ── main component ────────────────────────────────────────────────────────────
 export default function Footer() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
+
+  React.useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   return (
     <footer
       style={{
         background: 'linear-gradient(135deg,#1a2e0f,#2d4a1e)',
         color: 'white',
-        padding: '4rem 2rem 2rem',
+        padding: isMobile ? '3rem 1rem 2rem' : '4rem 2rem 2rem',
       }}
     >
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -109,9 +117,9 @@ export default function Footer() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: '2fr 1fr 1fr 1fr',
-            gap: '3rem',
-            marginBottom: '3rem',
+            gridTemplateColumns: isMobile ? '1fr' : '2fr 1fr 1fr 1fr',
+            gap: isMobile ? '2rem' : '3rem',
+            marginBottom: isMobile ? '2rem' : '3rem',
           }}
         >
           {/* Brand column */}
@@ -139,7 +147,7 @@ export default function Footer() {
             <p
               style={{
                 color: 'rgba(255,255,255,0.6)', fontSize: '0.87rem',
-                lineHeight: 1.75, marginBottom: '1.5rem', maxWidth: '280px',
+                lineHeight: 1.75, marginBottom: '1.5rem', maxWidth: isMobile ? '100%' : '280px',
               }}
             >
               Teknologi pengeringan untuk menjaga khasiat alami rempah Nusantara.
@@ -172,14 +180,18 @@ export default function Footer() {
           style={{
             borderTop: '1px solid rgba(255,255,255,0.1)',
             paddingTop: '1.5rem',
-            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            flexWrap: 'wrap', gap: '1rem',
+            display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
+            justifyContent: 'space-between',
+            alignItems: isMobile ? 'flex-start' : 'center',
+            flexWrap: 'wrap',
+            gap: '1rem',
           }}
         >
           <span style={{ color: 'rgba(255,255,255,0.38)', fontSize: '0.8rem' }}>
             © 2025 JavaHerbal. 
           </span>
-          <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: isMobile ? '1rem' : '2rem', flexWrap: 'wrap' }}>
             {LEGAL_LINKS.map((item) => (
               <span key={item}>
                 <HoverLink dimColor="rgba(255,255,255,0.38)" size="0.8rem">

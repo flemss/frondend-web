@@ -25,7 +25,7 @@ export default function Dashboard() {
       <Hero />
       
       {/* About Tool Section */}
-      <section style={{ background: 'white', padding: '5rem 2rem' }}>
+      <section style={{ background: 'white', padding: '3rem 1rem' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
             <div
@@ -165,7 +165,7 @@ export default function Dashboard() {
       </section>
 
       {/* Benefits Section */}
-      <section style={{ background: '#f5f2eb', padding: '5rem 2rem' }}>
+      <section style={{ background: '#f5f2eb', padding: '3rem 1rem' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
             <div
@@ -238,7 +238,7 @@ export default function Dashboard() {
       </section>
 
       {/* Recipes Section */}
-      <section style={{ background: 'white', padding: '5rem 2rem' }}>
+      <section style={{ background: 'white', padding: '3rem 1rem' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
             <div

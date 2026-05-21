@@ -49,6 +49,8 @@ export default function Login() {
     }
   }
 
+  const isMobile = window.innerWidth <= 768
+
   return (
     <div
       style={{
@@ -57,14 +59,14 @@ export default function Login() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '2rem',
+        padding: isMobile ? '1rem' : '2rem',
       }}
     >
       <div
         style={{
           background: 'white',
-          borderRadius: '24px',
-          padding: '3rem',
+          borderRadius: isMobile ? '16px' : '24px',
+          padding: isMobile ? '2rem 1.5rem' : '3rem',
           maxWidth: '440px',
           width: '100%',
           boxShadow: '0 20px 60px rgba(0,0,0,0.3)',

@@ -20,9 +20,7 @@ const ALL_PRODUCTS: Product[] = [
   { id: 1, name: 'Cabai Jawa Kering Premium', description: 'Dikeringkan pada suhu presisi untuk mempertahankan warna dan aroma.', price: 'Rp 85.000', unit: '100g', emoji: '🌶️', badge: 'TERLARIS', rating: 4.9, reviews: 128, bgColor: 'linear-gradient(135deg,#8B1A0A,#C0392B)', category: 'Rempah' },
   { id: 2, name: 'Cabai Jawa', description: 'Proses higienis, warna dan rasa alami terjaga sepanjang proses pengeringan.', price: 'Rp 30.000', unit: '100g', emoji: '🌿', rating: 4.7, reviews: 84, bgColor: 'linear-gradient(135deg,#5c3a1e,#8b5e3c)', category: 'Rempah' },
   { id: 3, name: 'Teh Rempah Hangat', description: 'Campuran herbal pilihan untuk kesehatan yang menyegarkan jiwa dan raga.', price: 'Rp 55.000', unit: 'pack', emoji: '🍵', badge: 'BARU', rating: 4.8, reviews: 56, bgColor: 'linear-gradient(135deg,#4a3220,#7a5c3a)', category: 'Teh' },
-  { id: 4, name: 'Jahe Merah Kering', description: 'Jahe merah pilihan kaya antioksidan, diproses tanpa bahan pengawet.', price: 'Rp 45.000', unit: '100g', emoji: '🫚', rating: 4.6, reviews: 72, bgColor: 'linear-gradient(135deg,#7a2010,#b84030)', category: 'Jamu' },
-  { id: 5, name: 'Teh Jahe Wangi', description: 'Kombinasi sempurna jahe dan teh untuk menghangatkan tubuh.', price: 'Rp 48.000', unit: 'pack', emoji: '☕', rating: 4.8, reviews: 102, bgColor: 'linear-gradient(135deg,#6b4423,#9b6b3f)', category: 'Teh' },
-  { id: 6, name: 'Kencur Bubuk', description: 'Kencur murni tanpa campuran, ideal untuk jamu dan minuman kesehatan.', price: 'Rp 42.000', unit: '100g', emoji: '🌾', rating: 4.7, reviews: 78, bgColor: 'linear-gradient(135deg,#7a5c2f,#a87d3f)', category: 'Jamu' },
+  { id: 4, name: 'Bubuk Cabai Jawa', description: 'Cabai jawa pilihan kaya antioksidan, diproses tanpa bahan pengawet.', price: 'Rp 135.000', unit: '1000g', emoji: '🫚', rating: 4.6, reviews: 72, bgColor: 'linear-gradient(135deg,#7a2010,#b84030)', category: 'Rempah' },
 ]
 
 const CATEGORIES = ['Semua', 'Rempah', 'Teh', 'Jamu']

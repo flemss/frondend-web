@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Leaf, Mail, Phone, MapPin, Instagram, Facebook, Youtube, LucideProps } from 'lucide-react'
+import { Leaf, Mail, Phone, MapPin, LucideProps } from 'lucide-react'
 
 // ── types ────────────────────────────────────────────────────────────────────
 type IconComponent = React.FC<LucideProps>
@@ -8,10 +8,8 @@ interface LinkColData { title: string; links: string[] }
 interface ContactData { Icon: IconComponent; text: string }
 
 // ── data ─────────────────────────────────────────────────────────────────────
-const SOCIAL_ICONS: IconComponent[] = [Instagram, Facebook, Youtube]
-
 const LINK_COLS: LinkColData[] = [
-  { title: 'Produk', links: ['Rempah Kering','Jamu Tradisional', 'Paket Bundle'] },
+  { title: 'Produk', links: ['Rempah Kering','Jamu Tradisional'] },
 ]
 
 const CONTACT_ITEMS: ContactData[] = [
@@ -43,27 +41,6 @@ function HoverLink({ children, dimColor = 'rgba(255,255,255,0.6)', size = '0.85r
     >
       {children}
     </a>
-  )
-}
-
-function SocialBtn({ Icon }: { Icon: IconComponent }) {
-  const [hovered, setHovered] = useState(false)
-  return (
-    <button
-      style={{
-        width: '36px', height: '36px',
-        borderRadius: '8px',
-        background: hovered ? 'rgba(122,182,72,0.28)' : 'rgba(255,255,255,0.1)',
-        border: '1px solid rgba(255,255,255,0.15)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color: hovered ? '#7ab648' : 'rgba(255,255,255,0.7)',
-        cursor: 'pointer', transition: 'all 0.2s',
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <Icon size={16} />
-    </button>
   )
 }
 
@@ -152,11 +129,6 @@ export default function Footer() {
             >
               Teknologi pengeringan untuk menjaga khasiat alami rempah Nusantara.
             </p>
-            <div style={{ display: 'flex', gap: '10px' }}>
-              {SOCIAL_ICONS.map((Icon, i) => (
-                <SocialBtn key={i} Icon={Icon} />
-              ))}
-            </div>
           </div>
 
           {/* Link columns */}

@@ -433,21 +433,28 @@ export default function About() {
               Terima kasih telah mendukung usaha kami. Mari bersama-sama menikmati 
               produk herbal berkualitas yang dibuat dengan penuh dedikasi.
             </p>
-            <button
-              style={{
-                background: 'linear-gradient(135deg,#d48c2a,#f0b855)',
-                color: 'white',
-                padding: '14px 32px',
-                borderRadius: '10px',
-                fontSize: '0.95rem',
-                fontWeight: 700,
-                border: 'none',
-                cursor: 'pointer',
-                boxShadow: '0 4px 18px rgba(212,140,42,0.38)',
-              }}
+            <a 
+              href="https://wa.me/6281234567890?text=Halo%20JavaHerbal%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: 'none' }}
             >
-              Hubungi Kami
-            </button>
+              <button
+                style={{
+                  background: 'linear-gradient(135deg,#d48c2a,#f0b855)',
+                  color: 'white',
+                  padding: '14px 32px',
+                  borderRadius: '10px',
+                  fontSize: '0.95rem',
+                  fontWeight: 700,
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 18px rgba(212,140,42,0.38)',
+                }}
+              >
+                Hubungi Kami
+              </button>
+            </a>
           </div>
         </section>
       </div>

@@ -5,7 +5,7 @@ import { Leaf, Mail, Phone, MapPin, LucideProps } from 'lucide-react'
 type IconComponent = React.FC<LucideProps>
 
 interface LinkColData { title: string; links: string[] }
-interface ContactData { Icon: IconComponent; text: string }
+interface ContactData { Icon: IconComponent; text: string; link?: string }
 
 // ── data ─────────────────────────────────────────────────────────────────────
 const LINK_COLS: LinkColData[] = [
@@ -13,9 +13,9 @@ const LINK_COLS: LinkColData[] = [
 ]
 
 const CONTACT_ITEMS: ContactData[] = [
-  { Icon: Phone, text: '+62 812-3456-7890' },
-  { Icon: Mail, text: 'info@javaherbal.id' },
-  { Icon: MapPin, text: 'Ambulu, Jawa Timur' },
+  { Icon: Phone, text: '+62 812-3456-7890', link: 'https://wa.me/6281234567890' },
+  { Icon: Mail, text: 'info@javaherbal.id', link: 'mailto:info@javaherbal.id' },
+  { Icon: MapPin, text: 'Ambulu, Jawa Timur', link: 'https://maps.app.goo.gl/wzSLJPGhoWXXByG49?g_st=aw' },
 ]
 
 const LEGAL_LINKS = ['Kebijakan Privasi', 'Syarat & Ketentuan', 'Kebijakan Cookie']
@@ -61,13 +61,38 @@ function LinkCol({ title, links }: LinkColData) {
   )
 }
 
-function ContactRow({ Icon, text }: ContactData) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-      <Icon size={15} color="#7ab648" />
-      <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.84rem' }}>{text}</span>
+function ContactRow({ Icon, text, link }: ContactData) {
+  const [hovered, setHovered] = useState(false)
+  
+  const content = (
+    <div 
+      style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: '10px', 
+        marginBottom: '12px',
+        cursor: link ? 'pointer' : 'default',
+        transition: 'all 0.2s',
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <Icon size={15} color={hovered && link ? '#a8d878' : '#7ab648'} />
+      <span style={{ 
+        color: hovered && link ? '#a8d878' : 'rgba(255,255,255,0.6)', 
+        fontSize: '0.84rem',
+        transition: 'color 0.2s',
+      }}>
+        {text}
+      </span>
     </div>
   )
+  
+  return link ? (
+    <a href={link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+      {content}
+    </a>
+  ) : content
 }
 
 // ── main component ────────────────────────────────────────────────────────────

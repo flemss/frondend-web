@@ -2,13 +2,18 @@ import React, { useState } from 'react'
 import { Filter } from 'lucide-react'
 import Footer from '../components/Footer'
 
+// Import gambar produk
+import cabaiKeringImg from '../fotoProduk/cabai jawa kering.jpg'
+import cabaiBasahImg from '../fotoProduk/cabai jawa.jpg'
+
 interface Product {
   id: number
   name: string
   description: string
   price: string
   unit: string
-  emoji: string
+  image?: string  // Ubah dari emoji ke image
+  emoji?: string  // Keep emoji sebagai fallback
   badge?: string
   rating: number
   reviews: number
@@ -17,8 +22,8 @@ interface Product {
 }
 
 const ALL_PRODUCTS: Product[] = [
-  { id: 1, name: 'Cabai Jawa Kering Premium', description: 'Dikeringkan pada suhu presisi untuk mempertahankan warna dan aroma.', price: 'Rp 85.000', unit: '100g', emoji: '🌶️', badge: 'TERLARIS', rating: 4.9, reviews: 128, bgColor: 'linear-gradient(135deg,#8B1A0A,#C0392B)', category: 'Rempah' },
-  { id: 2, name: 'Cabai Jawa', description: 'Proses higienis, warna dan rasa alami terjaga sepanjang proses pengeringan.', price: 'Rp 30.000', unit: '100g', emoji: '🌿', rating: 4.7, reviews: 84, bgColor: 'linear-gradient(135deg,#5c3a1e,#8b5e3c)', category: 'Rempah' },
+  { id: 1, name: 'Cabai Jawa Kering Premium', description: 'Dikeringkan pada suhu presisi untuk mempertahankan warna dan aroma.', price: 'Rp 85.000', unit: '100g', image: cabaiKeringImg, badge: 'TERLARIS', rating: 4.9, reviews: 128, bgColor: 'linear-gradient(135deg,#8B1A0A,#C0392B)', category: 'Rempah' },
+  { id: 2, name: 'Cabai Jawa', description: 'Proses higienis, warna dan rasa alami terjaga sepanjang proses pengeringan.', price: 'Rp 30.000', unit: '100g', image: cabaiBasahImg, rating: 4.7, reviews: 84, bgColor: 'linear-gradient(135deg,#5c3a1e,#8b5e3c)', category: 'Rempah' },
   { id: 3, name: 'Teh Rempah Hangat', description: 'Campuran herbal pilihan untuk kesehatan yang menyegarkan jiwa dan raga.', price: 'Rp 55.000', unit: 'pack', emoji: '🍵', badge: 'BARU', rating: 4.8, reviews: 56, bgColor: 'linear-gradient(135deg,#4a3220,#7a5c3a)', category: 'Teh' },
   { id: 4, name: 'Bubuk Cabai Jawa', description: 'Cabai jawa pilihan kaya antioksidan, diproses tanpa bahan pengawet.', price: 'Rp 135.000', unit: '1000g', emoji: '🫚', rating: 4.6, reviews: 72, bgColor: 'linear-gradient(135deg,#7a2010,#b84030)', category: 'Rempah' },
 ]
@@ -48,6 +53,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
           background: product.bgColor,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',
+          overflow: 'hidden',
         }}
       >
         <div
@@ -62,9 +68,24 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
         >
           {product.id}
         </div>
-        <span style={{ fontSize: '3.8rem', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))' }}>
-          {product.emoji}
-        </span>
+        {/* Tampilkan gambar jika ada, kalau tidak ada gunakan emoji */}
+        {product.image ? (
+          <img 
+            src={product.image} 
+            alt={product.name}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              transition: 'transform 0.3s',
+              transform: hovered ? 'scale(1.05)' : 'scale(1)',
+            }}
+          />
+        ) : (
+          <span style={{ fontSize: '3.8rem', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))' }}>
+            {product.emoji}
+          </span>
+        )}
       </div>
 
       <div style={{ padding: '1.1rem' }}>

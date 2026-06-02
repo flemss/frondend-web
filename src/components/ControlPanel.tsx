@@ -131,13 +131,33 @@ export default function ControlPanel() {
         const isDataFresh = dataAge < 30000 // Data dianggap segar jika < 30 detik
         
         setCurrentTemp(result.data.suhu)
-        setIsPowerOn(result.data.heater) // Heater + Fan In status
+        
+        // Jika data fresh, update dari backend. Jika tidak, set ke false (default OFF)
+        if (isDataFresh) {
+          const heaterStatus = result.data.heater === true || result.data.heater === 'true'
+          setIsPowerOn(heaterStatus)
+          
+          // Exhaust
+          if (result.data.exhaust !== undefined) {
+            const exhaustStatus = result.data.exhaust === true || result.data.exhaust === 'true'
+            setIsExhaustOn(exhaustStatus)
+          }
+        } else {
+          // Data sudah lama, set toggle ke OFF untuk keamanan
+          setIsPowerOn(false)
+          setIsExhaustOn(false)
+        }
+        
+        console.log('Data dari backend:', {
+          heater: result.data.heater,
+          fan: result.data.fan,
+          dataAge: `${Math.floor(dataAge / 1000)}s`,
+          isDataFresh: isDataFresh,
+          toggleStatus: isDataFresh ? result.data.heater : false
+        })
+        
         if (result.data.setpoint) {
           setTargetTemp(result.data.setpoint)
-        }
-        // Jika backend mengembalikan status exhaust
-        if (result.data.exhaust !== undefined) {
-          setIsExhaustOn(result.data.exhaust)
         }
         
         // Set hasData hanya jika data segar
@@ -145,13 +165,17 @@ export default function ControlPanel() {
         setLastDataTime(new Date(result.data.createdAt))
         setError(null)
       } else {
-        // Tidak ada data
+        // Tidak ada data - reset semua ke default
         setHasData(false)
         setLastDataTime(null)
+        setIsPowerOn(false)
+        setIsExhaustOn(false)
       }
     } catch (err) {
       setError('Gagal memuat data sensor')
       setHasData(false)
+      setIsPowerOn(false)
+      setIsExhaustOn(false)
       console.error('Error fetching latest data:', err)
     } finally {
       setLoading(false)

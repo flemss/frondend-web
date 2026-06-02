@@ -112,11 +112,12 @@ export default function ControlPanel() {
   const [data, setData] = useState<DataPoint[]>([])
   const [currentTemp, setCurrentTemp] = useState(0)
   const [isPowerOn, setIsPowerOn] = useState(false)
+  const [isExhaustOn, setIsExhaustOn] = useState(false)
   const [targetTemp, setTargetTemp] = useState(50)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-
-  const sliderPct = ((targetTemp - 30) / 50) * 100
+  const [hasData, setHasData] = useState(false) // Track apakah ada data masuk
+  const [lastDataTime, setLastDataTime] = useState<Date | null>(null) // Track waktu data terakhir
 
   // Fetch latest sensor data
   const fetchLatestData = async () => {
@@ -125,15 +126,32 @@ export default function ControlPanel() {
       const result = await response.json()
       
       if (result.success && result.data) {
+        // Cek apakah data benar-benar ada (bukan kosong)
+        const dataAge = new Date().getTime() - new Date(result.data.createdAt).getTime()
+        const isDataFresh = dataAge < 30000 // Data dianggap segar jika < 30 detik
+        
         setCurrentTemp(result.data.suhu)
-        setIsPowerOn(result.data.heater) // Heater status sebagai power
+        setIsPowerOn(result.data.heater) // Heater + Fan In status
         if (result.data.setpoint) {
           setTargetTemp(result.data.setpoint)
         }
+        // Jika backend mengembalikan status exhaust
+        if (result.data.exhaust !== undefined) {
+          setIsExhaustOn(result.data.exhaust)
+        }
+        
+        // Set hasData hanya jika data segar
+        setHasData(isDataFresh)
+        setLastDataTime(new Date(result.data.createdAt))
         setError(null)
+      } else {
+        // Tidak ada data
+        setHasData(false)
+        setLastDataTime(null)
       }
     } catch (err) {
       setError('Gagal memuat data sensor')
+      setHasData(false)
       console.error('Error fetching latest data:', err)
     } finally {
       setLoading(false)
@@ -174,7 +192,7 @@ export default function ControlPanel() {
     }
   }
 
-  // Toggle heater (kontrol manual)
+  // Toggle heater + fan in (kontrol manual)
   const handlePowerToggle = async () => {
     const newState = !isPowerOn
     
@@ -194,9 +212,9 @@ export default function ControlPanel() {
       
       if (result.success) {
         setIsPowerOn(newState)
-        console.log('Heater berhasil diubah:', newState ? 'ON' : 'OFF')
+        console.log('Heater + Fan In berhasil diubah:', newState ? 'ON' : 'OFF')
       } else {
-        alert('Gagal mengubah status heater')
+        alert('Gagal mengubah status heater + fan in')
       }
     } catch (err) {
       alert('Gagal mengirim kontrol')
@@ -204,24 +222,33 @@ export default function ControlPanel() {
     }
   }
 
-  // Update setpoint
-  const handleSetpointChange = async (newTemp: number) => {
-    setTargetTemp(newTemp)
+  // Toggle exhaust fan
+  const handleExhaustToggle = async () => {
+    const newState = !isExhaustOn
     
-    // Debounce: kirim ke backend setelah user selesai drag
-    // Untuk sementara langsung kirim
     try {
-      await fetch(`${API_URL}/sensor/setpoint`, {
+      // Endpoint untuk exhaust bisa disesuaikan dengan backend
+      const response = await fetch(`${API_URL}/sensor/exhaust`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          setpoint: newTemp
+          exhaust: newState
         })
       })
+      
+      const result = await response.json()
+      
+      if (result.success) {
+        setIsExhaustOn(newState)
+        console.log('Exhaust Fan berhasil diubah:', newState ? 'ON' : 'OFF')
+      } else {
+        alert('Gagal mengubah status exhaust fan')
+      }
     } catch (err) {
-      console.error('Error setting setpoint:', err)
+      alert('Gagal mengirim kontrol exhaust')
+      console.error('Error sending exhaust control:', err)
     }
   }
 
@@ -290,30 +317,32 @@ export default function ControlPanel() {
             <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#1a2810' }}>
               Panel Kontrol Pengeringan Pintar
             </h3>
-            <div
-              style={{
-                display: 'flex', alignItems: 'center', gap: '7px',
-                background: isPowerOn ? 'rgba(122,182,72,0.1)' : 'rgba(200,60,60,0.1)',
-                border: `1px solid ${isPowerOn ? 'rgba(122,182,72,0.3)' : 'rgba(200,60,60,0.3)'}`,
-                borderRadius: '20px', padding: '5px 14px',
-              }}
-            >
+            {hasData && (
               <div
                 style={{
-                  width: '8px', height: '8px', borderRadius: '50%',
-                  background: isPowerOn ? '#7ab648' : '#cc4444',
-                  boxShadow: isPowerOn ? '0 0 6px #7ab648' : 'none',
-                }}
-              />
-              <span
-                style={{
-                  fontSize: '0.78rem', fontWeight: 600,
-                  color: isPowerOn ? '#4a7c2f' : '#cc4444',
+                  display: 'flex', alignItems: 'center', gap: '7px',
+                  background: 'rgba(122,182,72,0.1)',
+                  border: '1px solid rgba(122,182,72,0.3)',
+                  borderRadius: '20px', padding: '5px 14px',
                 }}
               >
-                Status: {isPowerOn ? 'Online' : 'Offline'}
-              </span>
-            </div>
+                <div
+                  style={{
+                    width: '8px', height: '8px', borderRadius: '50%',
+                    background: '#7ab648',
+                    boxShadow: '0 0 6px #7ab648',
+                  }}
+                />
+                <span
+                  style={{
+                    fontSize: '0.78rem', fontWeight: 600,
+                    color: '#4a7c2f',
+                  }}
+                >
+                  Status: Online
+                </span>
+              </div>
+            )}
           </div>
 
           <div style={{ 
@@ -344,7 +373,7 @@ export default function ControlPanel() {
                     <Gauge value={currentTemp} max={100} />
                   </div>
 
-                  {/* Power row - Kontrol Manual Heater */}
+                  {/* Power row - Kontrol Heater + Fan In */}
                   <div
                     style={{
                       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -353,18 +382,32 @@ export default function ControlPanel() {
                     }}
                   >
                     <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2d4a1e', letterSpacing: '0.05em' }}>
-                      HEATER
+                      HEATER + FAN IN
                     </span>
                     <Toggle on={isPowerOn} onToggle={handlePowerToggle} />
                   </div>
 
-                  {/* Slider */}
+                  {/* Exhaust Fan row */}
+                  <div
+                    style={{
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                      background: '#f8faf5', borderRadius: '12px', padding: '11px 14px',
+                      marginBottom: '0.9rem',
+                    }}
+                  >
+                    <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2d4a1e', letterSpacing: '0.05em' }}>
+                      EXHAUST FAN
+                    </span>
+                    <Toggle on={isExhaustOn} onToggle={handleExhaustToggle} />
+                  </div>
+
+                  {/* Setpoint - READ ONLY (Monitoring) */}
                   <div
                     style={{
                       background: '#f8faf5', borderRadius: '12px', padding: '11px 14px',
                     }}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2d4a1e', letterSpacing: '0.05em' }}>
                         TARGET SUHU
                       </span>
@@ -372,20 +415,22 @@ export default function ControlPanel() {
                         {targetTemp}°C
                       </span>
                     </div>
-                    <style>{`
-                      .temp-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; outline: none; cursor: pointer; }
-                      .temp-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #d48c2a; box-shadow: 0 2px 6px rgba(212,140,42,0.5); cursor: pointer; }
-                      .temp-slider::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: #d48c2a; border: none; cursor: pointer; }
-                    `}</style>
-                    <input
-                      className="temp-slider"
-                      type="range" min={30} max={80}
-                      value={targetTemp}
-                      onChange={(e) => handleSetpointChange(Number(e.target.value))}
-                      style={{
-                        background: `linear-gradient(to right,#d48c2a ${sliderPct}%,#e8eee0 ${sliderPct}%)`,
-                      }}
-                    />
+                    <div style={{ 
+                      marginTop: '8px', 
+                      padding: '8px 12px', 
+                      background: 'rgba(212,140,42,0.08)',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(212,140,42,0.15)'
+                    }}>
+                      <p style={{ 
+                        margin: 0, 
+                        fontSize: '0.75rem', 
+                        color: '#8a7a5a',
+                        textAlign: 'center'
+                      }}>
+                        ℹ️ Target suhu diatur dari aplikasi mobile
+                      </p>
+                    </div>
                   </div>
                 </>
               )}

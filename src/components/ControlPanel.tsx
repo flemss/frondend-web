@@ -192,8 +192,10 @@ export default function ControlPanel() {
         // Convert data ke format grafik (24 jam terakhir)
         const chartData: DataPoint[] = result.data.map((item: SensorData, index: number) => {
           const date = new Date(item.createdAt)
+          // Konversi ke WIB (UTC+7)
+          const wibDate = new Date(date.getTime() + (7 * 60 * 60 * 1000))
           return {
-            jam: date.getHours(),
+            jam: wibDate.getUTCHours(),
             suhu: item.suhu
           }
         }).reverse()

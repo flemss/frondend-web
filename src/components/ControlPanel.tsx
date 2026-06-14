@@ -251,14 +251,14 @@ export default function ControlPanel() {
     const newState = !isExhaustOn
     
     try {
-      // Endpoint untuk exhaust bisa disesuaikan dengan backend
-      const response = await fetch(`${API_URL}/sensor/exhaust`, {
+      const response = await fetch(`${API_URL}/sensor/control`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          exhaust: newState
+          mode: 'MANUAL',
+          fanExhaust: newState
         })
       })
       

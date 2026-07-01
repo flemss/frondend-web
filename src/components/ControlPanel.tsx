@@ -4,7 +4,7 @@ import {
 } from 'recharts'
 
 // API URL - Backend Railway
-const API_URL = 'https://web-production-32384.up.railway.app/api'
+const API_URL = 'https://backend-cabai.up.railway.app/api'
 
 interface DataPoint {
   jam: number
